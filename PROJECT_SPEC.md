@@ -77,7 +77,7 @@ Notes:
 **Catalogue**
 
 - `brands`: name, slug, logo, description. Examples: Eaton, Fullriver, Solis, Eco Green Energy, Schneider Electric.
-- `product_categories`: slug, name, image, sort, description. Exactly six: Full River Battery, Inverters, UPS, Solar Panel, Distribution Board, Sockets. Do not add others.
+- `product_categories`: slug, name, image, sort, description. Exactly six: Fullriver Batteries, Inverters, UPS, Solar Panel, Distribution Board, Switches and Sockets (renamed November 2026, slugs unchanged). Do not add others.
 - `products`: slug, name, brand_id, category_id, summary, description, status (draft, published, archived), source_url, seo_title, seo_description, og_image, published_at.
 - `product_images`: product_id, media_id, sort, is_primary.
 - `product_features`: product_id, text, sort.

@@ -17,8 +17,9 @@ export const metadata: Metadata = { title: "Products" };
 
 const PAGE_SIZE = 10;
 const statuses: PublishStatus[] = ["draft", "published", "archived"];
+const datasheetFilters = ["missing", "present"] as const;
 
-type SearchParams = { q?: string; status?: string; category?: string; brand?: string; page?: string };
+type SearchParams = { q?: string; status?: string; category?: string; brand?: string; datasheet?: string; page?: string };
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   // Checked first, so a signed out visitor is sent to sign in before any query is started.
@@ -28,10 +29,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const status = statuses.find((s) => s === sp.status);
   const categoryId = idSchema.safeParse(sp.category).data;
   const brandId = idSchema.safeParse(sp.brand).data;
+  const datasheet = datasheetFilters.find((d) => d === sp.datasheet);
   const page = parsePage(sp.page);
 
   const [{ rows, total }, categories, brands, counts] = await Promise.all([
-    listProducts({ q: q || undefined, status, categoryId, brandId, page, pageSize: PAGE_SIZE }),
+    listProducts({ q: q || undefined, status, categoryId, brandId, datasheet, page, pageSize: PAGE_SIZE }),
     categoryOptions(),
     brandOptions(),
     statusCounts(),
@@ -40,13 +42,13 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   // A page past the end (for example after deleting the last product on it) goes to the last page, not an empty table.
   if (page > pages) {
     const qs = new URLSearchParams();
-    for (const [k, v] of Object.entries({ q, status, category: categoryId, brand: brandId })) if (v) qs.set(k, v);
+    for (const [k, v] of Object.entries({ q, status, category: categoryId, brand: brandId, datasheet })) if (v) qs.set(k, v);
     if (pages > 1) qs.set("page", String(pages));
     redirect(`/admin/products${qs.size ? `?${qs}` : ""}`);
   }
   const from = (page - 1) * PAGE_SIZE + 1;
   const to = Math.min(page * PAGE_SIZE, total);
-  const filtered = Boolean(q || status || categoryId || brandId);
+  const filtered = Boolean(q || status || categoryId || brandId || datasheet);
   const totalAll = counts.draft + counts.published + counts.archived;
 
   const create = (
@@ -62,7 +64,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         description={totalAll ? `${counts.published} published, ${counts.draft} draft, ${counts.archived} archived.` : undefined}
         actions={create}
       />
-      {totalAll > 0 ? <ProductFilters q={q} status={status ?? ""} categoryId={categoryId ?? ""} brandId={brandId ?? ""} categories={categories} brands={brands} /> : null}
+      {totalAll > 0 ? <ProductFilters q={q} status={status ?? ""} categoryId={categoryId ?? ""} brandId={brandId ?? ""} datasheet={datasheet ?? ""} categories={categories} brands={brands} /> : null}
 
       {rows.length === 0 ? (
         filtered ? (
@@ -80,7 +82,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
               Showing {from} to {to} of {total} product{total === 1 ? "" : "s"}
             </p>
             <div className="ml-auto">
-              <Pagination basePath="/admin/products" page={page} pages={pages} params={{ q: q || undefined, status, category: categoryId, brand: brandId }} />
+              <Pagination basePath="/admin/products" page={page} pages={pages} params={{ q: q || undefined, status, category: categoryId, brand: brandId, datasheet }} />
             </div>
           </div>
         </>

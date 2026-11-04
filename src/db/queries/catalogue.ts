@@ -110,6 +110,8 @@ export type ProductListFilters = {
   status?: PublishStatus;
   categoryId?: string;
   brandId?: string;
+  /** "missing" lists only products with no datasheet; "present" only those with at least one. */
+  datasheet?: "missing" | "present";
   page: number;
   pageSize: number;
 };
@@ -120,6 +122,10 @@ export async function listProducts(f: ProductListFilters): Promise<{ rows: Produ
   if (f.status) conditions.push(eq(s.products.status, f.status));
   if (f.categoryId) conditions.push(eq(s.products.categoryId, f.categoryId));
   if (f.brandId) conditions.push(eq(s.products.brandId, f.brandId));
+  if (f.datasheet) {
+    const hasDatasheet = sql`exists (select 1 from ${s.productDocuments} where ${s.productDocuments.productId} = ${s.products.id})`;
+    conditions.push(f.datasheet === "missing" ? sql`not ${hasDatasheet}` : hasDatasheet);
+  }
   const where = conditions.length ? and(...conditions) : undefined;
 
   const [{ n: total } = { n: 0 }] = await db.select({ n: count }).from(s.products).where(where);

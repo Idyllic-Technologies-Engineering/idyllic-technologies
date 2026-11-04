@@ -5,7 +5,7 @@ import { PageHero } from "@/components/corporate/page-hero";
 import { summarizeAnswers } from "@/assistant/flows";
 import { AUDIENCES, LOAD_BANDS, NEEDS } from "@/assistant/engine/types";
 import { contactPage } from "@/content/pages";
-import { getPublicProduct, getSiteContent } from "@/db/queries/public";
+import { getPublicCategories, getPublicProduct, getSiteContent } from "@/db/queries/public";
 import { pageMetadata } from "@/lib/seo";
 import { phoneHref } from "@/lib/site-values";
 
@@ -17,7 +17,7 @@ const pick = <T extends string>(list: readonly T[], value: string | undefined): 
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const sp = await searchParams;
-  const content = await getSiteContent();
+  const [content, categories] = await Promise.all([getSiteContent(), getPublicCategories()]);
   const { contact } = content;
   const type = sp.type === "quote" ? "quote" : "contact";
   const slug = /^[a-z0-9-]{1,80}$/.test(sp.product ?? "") ? sp.product! : null;
@@ -68,7 +68,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
 
         <div className="reveal flex flex-col gap-4">
           <h2 className="text-3xl font-medium">{contactPage.sendLabel}</h2>
-          <ContactForm initialType={type} productSlug={product ? product.slug : null} productName={product?.name ?? null} turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null} initialMessage={initialMessage} fromAssistant={fromAssistant} />
+          <ContactForm initialType={type} categories={categories.map((c) => ({ slug: c.slug, name: c.name }))} initialItems={product ? [product.category.slug] : []} productSlug={product ? product.slug : null} productName={product?.name ?? null} turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null} initialMessage={initialMessage} fromAssistant={fromAssistant} />
         </div>
       </Container>
     </>

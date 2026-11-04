@@ -8,7 +8,7 @@ import { verifyTurnstile } from "@/lib/contact/turnstile";
 import { fieldErrorsFromZod } from "@/lib/validation";
 
 /** What the visitor typed, sent back with an error so the form can put it back (React clears the form after an action). */
-export type ContactValues = { name: string; email: string; phone: string; message: string };
+export type ContactValues = { name: string; email: string; phone: string; message: string; items: string[]; quantity: string; useFor: string };
 
 export type ContactState =
   | { status: "idle" }
@@ -23,13 +23,17 @@ const BUSY = "We could not send your message just now. Please try again in a mom
  */
 export async function submitContactAction(_prev: ContactState, formData: FormData): Promise<ContactState> {
   const text = (key: string) => String(formData.get(key) ?? "");
-  const values: ContactValues = { name: text("name"), email: text("email"), phone: text("phone"), message: text("message") };
+  const items = formData.getAll("items").map(String);
+  const values: ContactValues = { name: text("name"), email: text("email"), phone: text("phone"), message: text("message"), items, quantity: text("quantity"), useFor: text("useFor") };
   const parsed = contactInputSchema.safeParse({
     type: formData.get("type") ?? "contact",
     name: formData.get("name"),
     email: formData.get("email"),
     phone: formData.get("phone") ?? "",
-    message: formData.get("message"),
+    message: formData.get("message") ?? "",
+    items,
+    quantity: formData.get("quantity") ?? undefined,
+    useFor: formData.get("useFor") || undefined,
     productSlug: formData.get("productSlug") ?? undefined,
     origin: formData.get("origin") ?? undefined,
     turnstileToken: formData.get("cf-turnstile-response") ?? "",

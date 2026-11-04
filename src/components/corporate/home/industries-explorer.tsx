@@ -5,8 +5,9 @@ import { IndustryPhoto } from "@/components/corporate/industry-photo";
 import type { Industry } from "@/content/pages";
 
 /**
- * The six industries as a list with one open at a time: the chosen one is dark and large, the rest are
- * quiet. Every photograph is in the page, stacked, so switching is a fade and never a load.
+ * The industries as a list with one open at a time: the chosen one is dark and large, the rest are
+ * quiet. Every photograph is in the page, stacked, so switching is a fade and never a load. On large screens
+ * the photograph stays in view beside the list, which is taller than it.
  */
 export function IndustriesExplorer({ industries }: { industries: readonly Industry[] }) {
   const [activeId, setActiveId] = useState(industries[0]?.id);
@@ -24,7 +25,7 @@ export function IndustriesExplorer({ industries }: { industries: readonly Indust
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => setActiveId(industry.id)}
-                className={`flex min-h-16 w-full items-center py-4 text-left font-heading text-2xl font-medium transition-colors duration-200 sm:text-3xl ${isActive ? "text-ink" : "text-ink-muted/70 hover:text-ink"}`}
+                className={`flex min-h-14 w-full items-center py-3 text-left font-heading text-xl font-medium transition-colors duration-200 sm:text-2xl lg:text-[1.75rem] ${isActive ? "text-ink" : "text-ink-muted/70 hover:text-ink"}`}
               >
                 {industry.title}
               </button>
@@ -33,7 +34,7 @@ export function IndustriesExplorer({ industries }: { industries: readonly Indust
         })}
       </ul>
 
-      <div className="flex flex-col gap-6" aria-live="polite">
+      <div className="flex flex-col gap-6 lg:sticky lg:top-28 lg:self-start" aria-live="polite">
         <div className="relative aspect-[4/3] overflow-hidden rounded-container bg-sunken">
           {industries.map((industry) => (
             <div
@@ -48,7 +49,7 @@ export function IndustriesExplorer({ industries }: { industries: readonly Indust
         </div>
         <div className="flex flex-col gap-2">
           <h3 className="text-2xl font-medium">{active.title}</h3>
-          <p className="max-w-[56ch] text-lg leading-relaxed text-ink-muted">{active.body}</p>
+          {active.body ? <p className="max-w-[56ch] text-lg leading-relaxed text-ink-muted">{active.body}</p> : null}
         </div>
       </div>
     </div>

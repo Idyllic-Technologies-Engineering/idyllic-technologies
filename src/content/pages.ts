@@ -46,7 +46,8 @@ export const hero = {
 } as const;
 
 /** `fit: "contain"` shows the whole picture on a soft backdrop, for collages and wide group shots that cover would cut. */
-export type Industry = { id: string; title: string; body: string; image: { src: string; alt: string; width: number; height: number; fit?: "cover" | "contain" } };
+/** `body: null` means Idyllic has not supplied the copy yet. The title and photo are shown without a description. */
+export type Industry = { id: string; title: string; body: string | null; image: { src: string; alt: string; width: number; height: number; fit?: "cover" | "contain" } };
 
 export const industriesIntro = { title: "Industries We Cover", body: company.overview } as const;
 
@@ -55,25 +56,19 @@ export const industries: readonly Industry[] = [
     id: "banking-financial-services",
     title: "Banking & Financial Services",
     body: "Idyllic Technologies delivers customized energy solutions for the banking and financial sector.",
-    image: { src: "/photos/industry-banking-idyllic.webp", alt: "Two workers in hard hats fitting solar panels on a tiled roof", width: 1200, height: 672 },
-  },
-  {
-    id: "capital-projects-infrastructure",
-    title: "Capital Projects & Infrastructure",
-    body: "Specialized capabilities to help clients face the challenges of today.",
-    image: { src: "/photos/industry-capital-idyllic.webp", alt: "Five colleagues standing together at an Idyllic Technologies event", width: 1200, height: 500, fit: "contain" },
+    image: { src: "/photos/industry-banking.webp", alt: "Rows of server cabinets in a large, softly lit data hall", width: 1400, height: 1400 },
   },
   {
     id: "hospitality",
     title: "Hospitality",
     body: "Our Hybrid solution provide alternative energy solution which in turn reduces cost of operations",
-    image: { src: "/photos/industry-hospitality-idyllic.webp", alt: "Rows of large batteries below a wall of inverters and electrical boxes", width: 1152, height: 604, fit: "contain" },
+    image: { src: "/photos/industry-hospitality.webp", alt: "A technician in a yellow hard hat servicing an air conditioning unit", width: 1400, height: 933 },
   },
   {
     id: "travel-transport-logistics",
     title: "Travel, Transport & Logistics",
     body: "Idyllic Technologies delivers innovative alternative energy solutions for the Travel and Logistics industry",
-    image: { src: "/photos/industry-travel-idyllic.webp", alt: "A collage of a commuter train, offshore wind turbines, a solar mirror array and a solar powered roadside unit", width: 1079, height: 673, fit: "contain" },
+    image: { src: "/photos/industry-travel.webp", alt: "A line of wind turbines across flat land under an evening sky", width: 1400, height: 933 },
   },
   {
     id: "healthcare-life-sciences",
@@ -86,6 +81,44 @@ export const industries: readonly Industry[] = [
     title: "Energy, Power & Products",
     body: "We have made the demand and supply of electricity more convenient by making alternative energy solutions available at an affordable cost",
     image: { src: "/photos/industry-energy.webp", alt: "Solar panels and wind turbines beside a power station at sunset", width: 1400, height: 800 },
+  },
+  // The six industries below were added in November 2026. Idyllic supplied no copy for them, so their descriptions
+  // were drafted in the style of the approved ones above, at Idyllic's request. Replace them if Idyllic sends its own.
+  {
+    id: "educational-sector",
+    title: "Educational Sector",
+    body: "Idyllic Technologies delivers reliable power solutions that keep schools, colleges and universities running.",
+    image: { src: "/photos/industry-education.webp", alt: "A small robot holding a solar panel on top of a green globe under a cloud", width: 1400, height: 1400 },
+  },
+  {
+    id: "manufacturing",
+    title: "Manufacturing",
+    body: "We provide dependable backup power and distribution solutions that support continuous production.",
+    image: { src: "/photos/industry-manufacturing.webp", alt: "Three factory workers in hard hats looking at a laptop on a production floor", width: 1400, height: 934 },
+  },
+  {
+    id: "telecommunications",
+    title: "Telecommunications",
+    body: "Our UPS systems and alternative energy solutions keep network and telecom equipment powered and connected.",
+    image: { src: "/photos/industry-telecommunications.webp", alt: "A server hall lit in blue light", width: 1400, height: 862 },
+  },
+  {
+    id: "government-public-sectors",
+    title: "Government and Public Sectors",
+    body: "Idyllic Technologies delivers dependable energy solutions for government offices, agencies and public institutions.",
+    image: { src: "/photos/industry-government.webp", alt: "A wind turbine on a green hillside under a dramatic sky", width: 1200, height: 1798 },
+  },
+  {
+    id: "oil-gas",
+    title: "Oil and Gas",
+    body: "We provide reliable power backup and electrical distribution solutions for oil and gas facilities.",
+    image: { src: "/photos/industry-oil-gas.webp", alt: "An aerial view of an oil and gas plant with storage tanks and pipelines at sunrise", width: 1400, height: 788 },
+  },
+  {
+    id: "residential",
+    title: "Residential",
+    body: "Our solar panels, inverters and batteries bring clean and reliable energy to homes at an affordable cost.",
+    image: { src: "/photos/industry-residential.webp", alt: "Solar panels on a rooftop in bright sunlight", width: 1200, height: 1715 },
   },
 ];
 

@@ -30,6 +30,31 @@ describe("contactInputSchema", () => {
   });
 });
 
+describe("quote requests", () => {
+  const quote = { name: "Ada Obi", email: "ada@example.com", type: "quote" };
+  it("needs at least one product, but no message", () => {
+    const none = contactInputSchema.safeParse(quote);
+    expect(none.success ? [] : none.error.issues.map((i) => i.path[0])).toEqual(["items"]);
+    const r = contactInputSchema.parse({ ...quote, items: ["inverters", "ups"], quantity: " 4 units ", useFor: "office" });
+    expect(r.items).toEqual(["inverters", "ups"]);
+    expect(r.quantity).toBe("4 units");
+    expect(r.useFor).toBe("office");
+  });
+  it("does not need a product ticked when it comes from a product page", () => {
+    expect(contactInputSchema.safeParse({ ...quote, productSlug: "eaton-9sx" }).success).toBe(true);
+  });
+  it("drops an unknown use and rejects odd product slugs", () => {
+    expect(contactInputSchema.parse({ ...quote, items: ["ups"], useFor: "spaceship" }).useFor).toBeUndefined();
+    expect(contactInputSchema.safeParse({ ...quote, items: ["<script>"] }).success).toBe(false);
+  });
+  it("puts the quote details in the email", () => {
+    const n = buildNotification(contactInputSchema.parse({ ...quote, items: ["ups"] }), null, "abc", "", { productsWanted: "UPS, Inverters", quantity: "2", usedFor: "Office" });
+    expect(n.text).toContain("Products wanted: UPS, Inverters");
+    expect(n.text).toContain("Quantity: 2");
+    expect(n.text).toContain("Used for: Office");
+  });
+});
+
 describe("rate limiting helpers", () => {
   it("is over the limit at the maximum, not before", () => {
     expect(isOverLimit(RATE_LIMITS.perIp.max - 1, RATE_LIMITS.perIp.max)).toBe(false);

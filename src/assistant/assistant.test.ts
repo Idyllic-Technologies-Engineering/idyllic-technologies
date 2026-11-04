@@ -104,7 +104,7 @@ describe("recommendations", () => {
     const many = [
       ...Array.from({ length: 5 }, (_, i) => ups(3000 + i, ["home"])),
       ...Array.from({ length: 5 }, () => product({ categorySlug: "inverters", categoryName: "Inverters", tags: ["home"] })),
-      ...Array.from({ length: 5 }, () => product({ categorySlug: "full-river-battery", categoryName: "Full River Battery", tags: ["home"] })),
+      ...Array.from({ length: 5 }, () => product({ categorySlug: "full-river-battery", categoryName: "Fullriver Batteries", tags: ["home"] })),
     ];
     const { groups } = recommend(many, { audience: "home", need: "backup", load: "not-sure" });
     const total = groups.reduce((sum, g) => sum + g.products.length, 0);

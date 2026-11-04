@@ -23,13 +23,13 @@ export const faqSeeds: readonly FaqSeed[] = [
   {
     question: "What can I buy from Idyllic Technologies?",
     answer:
-      "Full River batteries, inverters, UPS, solar panels, distribution boards and sockets. We also provide custom tailored solutions for businesses and institutions.",
+      "Full River batteries, inverters, UPS, solar panels, distribution boards, switches and sockets. We also provide custom tailored solutions for businesses and institutions.",
     sort: 3,
   },
   {
     question: "What sectors do you specialize in?",
     answer:
-      "Banking & Financial Services; Capital Projects & Infrastructure; Hospitality; Travel, Transport & Logistics; Healthcare & Life Sciences; Energy, Power & Products.",
+      "Banking & Financial Services; Hospitality; Travel, Transport & Logistics; Healthcare & Life Sciences; Energy, Power & Products; Educational Sector; Manufacturing; Telecommunications; Government and Public Sectors; Oil and Gas; Residential.",
     sort: 4,
   },
   {

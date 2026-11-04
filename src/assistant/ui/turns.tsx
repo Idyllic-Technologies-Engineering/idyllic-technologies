@@ -134,11 +134,13 @@ function Row({ row, names }: { row: ComparisonTurnRow; names: string[] }) {
     <div className="flex flex-col gap-1 border-t border-line pt-3 first:border-t-0 first:pt-0">
       <dt className="text-sm font-medium text-ink-muted">{row.label}</dt>
       <dd>
-        <ul className="flex flex-col gap-0.5">
+        {/* Two columns that both wrap, so a long value (a dimension string) never squeezes the product name
+            to one letter a line or runs out of the card. Values share a left edge, so they read like a table. */}
+        <ul className="flex flex-col gap-2">
           {row.values.map((value, i) => (
-            <li key={names[i]} className="flex justify-between gap-4">
-              <span className="min-w-0 text-ink-muted break-words">{names[i]}</span>
-              <span className={`shrink-0 text-right ${row.differs ? "font-medium" : ""}`}>{value}</span>
+            <li key={names[i]} className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-x-4">
+              <span className="min-w-0 text-ink-muted [overflow-wrap:anywhere]">{names[i]}</span>
+              <span className={`min-w-0 [overflow-wrap:anywhere] tabular-nums ${row.differs ? "font-medium" : ""}`}>{value}</span>
             </li>
           ))}
         </ul>

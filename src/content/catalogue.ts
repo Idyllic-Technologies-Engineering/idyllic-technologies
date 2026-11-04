@@ -1,7 +1,9 @@
 /**
  * Starting catalogue values, seeded once by src/db/seed.ts and edited in the CMS afterwards.
  * Exactly six categories. Do not add more.
- * Category descriptions are verbatim from the approved PDF. Do not edit them here.
+ * Category descriptions are verbatim from the approved PDF. Do not edit them here. Two names changed at
+ * Idyllic's request in November 2026: "Full River Battery" is "Fullriver Batteries" and "Sockets" is
+ * "Switches and Sockets" (also in that description). Slugs are unchanged, so addresses keep working.
  * Spec templates come from section 5 of PROJECT_SPEC.md and are to be confirmed against
  * Eaton data. Units are only filled in where the spec states them. Nothing here is guessed.
  */
@@ -22,7 +24,7 @@ export type SpecTemplateSeed = {
 export const categorySeeds = [
   {
     slug: "full-river-battery",
-    name: "Full River Battery",
+    name: "Fullriver Batteries",
     description: "The Full river battery. Energy (wind) household systems",
     sort: 0,
   },
@@ -52,8 +54,8 @@ export const categorySeeds = [
   },
   {
     slug: "sockets",
-    name: "Sockets",
-    description: "Our Sockets are useful for both stand-alone and network applications",
+    name: "Switches and Sockets",
+    description: "Our Switches and Sockets are useful for both stand-alone and network applications",
     sort: 5,
   },
 ] as const;

@@ -37,9 +37,33 @@ export const clientSeeds: readonly ClientSeed[] = [
  */
 export const categoryImageSeeds: Record<string, { file: string; alt: string }> = {
   "full-river-battery": { file: "fullriver-battery.jpeg", alt: "A stack of grey Fullriver sealed batteries" },
-  inverters: { file: "circuit-board-close-up-with-different-components.jpg", alt: "Close-up of a blue circuit board with capacitors" },
+  inverters: { file: "products-solis-update.webp", alt: "A white Solis inverter with a display screen" },
   ups: { file: "modern-data-center-providing-cloud-services-enabling-businesses-access-computing-resources-storage-demand-internet-server-room-infrastructure-3d-render-animation.jpg", alt: "A server hall lit in blue light" },
   "solar-panel": { file: "solar-panels-rooftop-generating-clean-renewable-energy.jpg", alt: "Rows of solar panels on a rooftop in sunlight" },
-  "distribution-board": { file: "distrubution-board.jpeg", alt: "Two grey electrical distribution boards, one open to show the breakers" },
+  "distribution-board": { file: "products-distrubution.jpg", alt: "Close-up of wiring and terminal blocks inside an electrical distribution board" },
   sockets: { file: "switch-sockets-white-module-modern-wall.jpg", alt: "A white wall plate with a switch and two sockets" },
+};
+
+/**
+ * November 2026 changes requested by Idyllic, applied once to the live database by scripts/seed-assets.ts.
+ * Text is only replaced where it still matches what was seeded, so nothing staff have edited is overwritten.
+ */
+export const catalogueUpdatesNov2026 = {
+  /** Category names are fixed in the admin, so they are always set. Slugs do not change. */
+  names: { "full-river-battery": "Fullriver Batteries", sockets: "Switches and Sockets" } as Record<string, string>,
+  descriptions: [
+    { slug: "sockets", from: "Our Sockets are useful for both stand-alone and network applications", to: "Our Switches and Sockets are useful for both stand-alone and network applications" },
+  ],
+  /** New covers for the main site and, where no marketplace image is set, the marketplace. */
+  images: ["inverters", "distribution-board"],
+  faqs: [
+    {
+      from: "Full River batteries, inverters, UPS, solar panels, distribution boards and sockets. We also provide custom tailored solutions for businesses and institutions.",
+      to: "Full River batteries, inverters, UPS, solar panels, distribution boards, switches and sockets. We also provide custom tailored solutions for businesses and institutions.",
+    },
+    {
+      from: "Banking & Financial Services; Capital Projects & Infrastructure; Hospitality; Travel, Transport & Logistics; Healthcare & Life Sciences; Energy, Power & Products.",
+      to: "Banking & Financial Services; Hospitality; Travel, Transport & Logistics; Healthcare & Life Sciences; Energy, Power & Products; Educational Sector; Manufacturing; Telecommunications; Government and Public Sectors; Oil and Gas; Residential.",
+    },
+  ],
 };

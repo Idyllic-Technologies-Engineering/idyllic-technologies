@@ -7,10 +7,10 @@
  */
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { eq, isNull } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import sharp from "sharp";
 import { db, schema as s } from "@/db";
-import { categoryImageSeeds, clientSeeds, testimonialSeeds } from "@/content/public-seeds";
+import { catalogueUpdatesNov2026, categoryImageSeeds, clientSeeds, testimonialSeeds } from "@/content/public-seeds";
 import { uploadImage } from "@/lib/media/upload";
 
 async function marker(key: string) {
@@ -57,6 +57,20 @@ async function main() {
     }
     await setMarker("seed.category-images.v1");
     console.log(`category images: ${cats.length} set`);
+  }
+  if (!(await marker("seed.catalogue-updates.2026-11"))) {
+    const u = catalogueUpdatesNov2026;
+    for (const [slug, name] of Object.entries(u.names)) await db.update(s.productCategories).set({ name }).where(eq(s.productCategories.slug, slug));
+    for (const d of u.descriptions) await db.update(s.productCategories).set({ description: d.to }).where(and(eq(s.productCategories.slug, d.slug), eq(s.productCategories.description, d.from)));
+    for (const slug of u.images) {
+      const seed = categoryImageSeeds[slug];
+      if (!seed) continue;
+      const mediaId = await upload(seed.file, seed.alt, owner.id);
+      await db.update(s.productCategories).set({ imageMediaId: mediaId }).where(eq(s.productCategories.slug, slug));
+    }
+    for (const f of u.faqs) await db.update(s.faqs).set({ answer: f.to }).where(eq(s.faqs.answer, f.from));
+    await setMarker("seed.catalogue-updates.2026-11");
+    console.log("catalogue updates (Nov 2026): category names, two covers and two FAQ answers updated");
   }
   console.log("Asset seed complete.");
   process.exit(0);

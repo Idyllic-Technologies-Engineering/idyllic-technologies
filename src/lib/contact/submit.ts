@@ -1,9 +1,10 @@
 import "server-only";
-import { and, eq, gt, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, sql } from "drizzle-orm";
 import { Resend } from "resend";
 import { db, schema } from "@/db";
-import { buildNotification } from "@/lib/contact/email";
+import { buildNotification, type QuoteDetails } from "@/lib/contact/email";
 import { RATE_LIMITS, hashIp, isOverLimit } from "@/lib/contact/rate-limit";
+import { AUDIENCE_LABELS } from "@/assistant/questions";
 import type { ContactInput } from "@/lib/contact/schemas";
 import { parseSiteValue, contactSchema } from "@/lib/site-values";
 
@@ -47,6 +48,14 @@ export async function submitEnquiry(input: ContactInput, ip: string | null, user
     product = p ?? null;
   }
 
+  // What a quote request asks for, as readable text for the admin and the email. Unknown slugs are dropped.
+  const categories = input.type === "quote" && input.items.length ? await db.select({ name: s.productCategories.name }).from(s.productCategories).where(inArray(s.productCategories.slug, input.items)).orderBy(s.productCategories.sort) : [];
+  const quote: QuoteDetails = {
+    productsWanted: categories.map((c) => c.name).join(", ") || null,
+    quantity: input.type === "quote" ? input.quantity : null,
+    usedFor: input.type === "quote" && input.useFor ? AUDIENCE_LABELS[input.useFor] : null,
+  };
+
   let id: string;
   try {
     const [row] = await db
@@ -56,9 +65,16 @@ export async function submitEnquiry(input: ContactInput, ip: string | null, user
         name: input.name,
         email: input.email.toLowerCase(),
         phone: input.phone,
-        message: input.message,
+        message: input.message || null,
         productId: product?.id ?? null,
-        payload: { source: "website-form", ipHash, userAgent: userAgent?.slice(0, 200) ?? null },
+        payload: {
+          source: "website-form",
+          ...(quote.productsWanted ? { products_wanted: quote.productsWanted } : {}),
+          ...(quote.quantity ? { quantity: quote.quantity } : {}),
+          ...(quote.usedFor ? { used_for: quote.usedFor } : {}),
+          ipHash,
+          userAgent: userAgent?.slice(0, 200) ?? null,
+        },
       })
       .returning({ id: s.enquiries.id });
     id = row!.id;
@@ -71,7 +87,7 @@ export async function submitEnquiry(input: ContactInput, ip: string | null, user
   const key = process.env.RESEND_API_KEY;
   if (key) {
     try {
-      const { subject, text } = buildNotification(input, product?.name ?? null, id, process.env.NEXT_PUBLIC_SITE_URL ?? "");
+      const { subject, text } = buildNotification(input, product?.name ?? null, id, process.env.NEXT_PUBLIC_SITE_URL ?? "", quote);
       const from = process.env.CONTACT_FROM_EMAIL ?? "Idyllic Technologies <onboarding@resend.dev>";
       const { error } = await new Resend(key).emails.send({ from, to: await recipient(), replyTo: input.email, subject, text });
       if (error) throw new Error(error.message);

@@ -13,7 +13,7 @@ A custom corporate website (idyllictechnologies.com), a marketplace (shop.idylli
 - The marketplace call to action is Book on WhatsApp. Log a `booking_intents` row, then open the `wa.me` link.
 - No LLM, embeddings, vector database or paid AI service. The Energy Assistant is deterministic and sits behind an `AssistantEngine` interface.
 - Do not rewrite, paraphrase or fix grammar in approved copy. Do not invent statistics, claims, specifications or FAQ answers. If content is missing, leave a visible TODO in the CMS or content file and tell the user.
-- Exactly six product categories: Full River Battery, Inverters, UPS, Solar Panel, Distribution Board, Sockets. Do not add more.
+- Exactly six product categories: Fullriver Batteries, Inverters, UPS, Solar Panel, Distribution Board, Switches and Sockets. Do not add more.
 - No hardcoded product, blog, FAQ or testimonial data in components. Content comes from the database or editable content values.
 - Never expose the Supabase service role key or any secret to client code.
 - Avoid new paid services. Ask before adding a dependency that has a cost.
