@@ -16,6 +16,7 @@ export function ShopFooter({ contact, categories }: { contact: ContactDetails; c
         <div className="flex max-w-md flex-col gap-4">
           <p className="text-lg leading-relaxed">{company.statement}</p>
           <a href={phoneHref(contact.phone)} className="w-fit font-heading text-2xl font-medium underline-offset-4 hover:underline">{contact.phone}</a>
+          {contact.secondaryPhone ? <a href={phoneHref(contact.secondaryPhone)} className="w-fit font-heading text-2xl font-medium underline-offset-4 hover:underline">{contact.secondaryPhone}</a> : null}
           <p className="text-on-footer-muted">{contact.hours}</p>
         </div>
         <nav aria-label="Shop" className="flex flex-col gap-3">

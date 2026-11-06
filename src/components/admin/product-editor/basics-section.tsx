@@ -5,13 +5,14 @@ import { Field } from "@/components/ui/field";
 import { SelectField } from "@/components/ui/select-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import { slugify } from "@/lib/catalogue/slug";
-import type { BrandOption, CategoryOption, SuitableFor } from "@/lib/catalogue/types";
+import type { BrandOption, CategoryOption, GroupOption, SuitableFor } from "@/lib/catalogue/types";
 import { Section } from "@/components/admin/form-section";
 import type { SectionProps } from "./types";
 
 type Props = SectionProps & {
   brands: BrandOption[];
   categories: CategoryOption[];
+  groups: GroupOption[];
   shopUrl: string;
   /** Set when an existing product is moved to another category. */
   categoryChangeWarning: boolean;
@@ -24,7 +25,8 @@ const suitableOptions: { value: SuitableFor; label: string }[] = [
   { value: "industrial", label: "Industrial" },
 ];
 
-export function BasicsSection({ draft, update, errors, brands, categories, shopUrl, categoryChangeWarning }: Props) {
+export function BasicsSection({ draft, update, errors, brands, categories, groups, shopUrl, categoryChangeWarning }: Props) {
+  const categoryGroups = groups.filter((g) => g.categoryId === draft.categoryId);
   return (
     <Section id="basics" title="Basics">
       <Field
@@ -68,9 +70,20 @@ export function BasicsSection({ draft, update, errors, brands, categories, shopU
           error={errors.categoryId}
           hint={categoryChangeWarning ? "Specs recorded for the previous category are removed when you save." : "Choosing a category loads that category's specs."}
           required
-          onChange={(e) => update({ categoryId: e.target.value || null })}
+          onChange={(e) => update({ categoryId: e.target.value || null, groupId: null })}
         />
       </div>
+      {categoryGroups.length > 0 ? (
+        <SelectField
+          id="product-group"
+          label="Series"
+          emptyLabel="No series"
+          hint="Products in this category are shown under their series heading on the products page and the marketplace."
+          options={categoryGroups.map((g) => ({ value: g.id, label: g.name }))}
+          value={draft.groupId ?? ""}
+          onChange={(e) => update({ groupId: e.target.value || null })}
+        />
+      ) : null}
       <TextareaField id="product-summary" label="Summary" hint="One or two sentences. Shown on cards and in search results." value={draft.summary} error={errors.summary} maxLength={500} rows={3} onChange={(e) => update({ summary: e.target.value })} />
       <TextareaField id="product-description" label="Description" value={draft.description} error={errors.description} maxLength={20000} rows={8} onChange={(e) => update({ description: e.target.value })} />
       <Field

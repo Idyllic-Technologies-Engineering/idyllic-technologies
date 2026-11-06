@@ -69,6 +69,19 @@ export const productCategories = pgTable("product_categories", {
   sort: integer("sort").notNull().default(0),
 });
 
+/** A series inside a category, for example the HGL AGM Series inside Fullriver Batteries. Optional: most categories have none. */
+export const productGroups = pgTable(
+  "product_groups",
+  {
+    id: id(),
+    categoryId: uuid("category_id").notNull().references(() => productCategories.id, { onDelete: "cascade" }),
+    slug: text("slug").notNull(),
+    name: text("name").notNull(),
+    sort: integer("sort").notNull().default(0),
+  },
+  (t) => [uniqueIndex("product_groups_category_slug").on(t.categoryId, t.slug)],
+);
+
 export const products = pgTable(
   "products",
   {
@@ -79,6 +92,8 @@ export const products = pgTable(
     categoryId: uuid("category_id")
       .notNull()
       .references(() => productCategories.id, { onDelete: "restrict" }),
+    /** The series this product belongs to, when its category has series. */
+    groupId: uuid("group_id").references(() => productGroups.id, { onDelete: "set null" }),
     summary: text("summary"),
     description: text("description"),
     status: publishStatus("status").notNull().default("draft"),

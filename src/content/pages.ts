@@ -151,7 +151,7 @@ export const team = {
 export const about = {
   title: "About Us",
   valueProposition: { title: "Our value proposition", body: "We focus on Customer satisfaction" },
-  qualityAssurance: { title: "Our quality assurance", body: "All our product come with guarantee" },
+  qualityAssurance: { title: "Our quality assurance", body: "All our products come with guarantee" },
   /** The About page introduction: the story's tagline. */
   headline: story.tagline,
   culture: [

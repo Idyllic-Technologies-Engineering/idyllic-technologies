@@ -12,6 +12,8 @@ export const teamSchema = z.array(z.object({ name: z.string(), role: z.string() 
 export const contactSchema = z.object({
   phone: z.string(),
   tollFree: z.string().optional(),
+  /** A second number, shown under the main one. */
+  secondaryPhone: z.string().optional(),
   email: z.string(),
   careersEmail: z.string(),
   hours: z.string(),

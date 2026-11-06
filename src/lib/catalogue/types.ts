@@ -6,6 +6,7 @@ import type { SpecValueType } from "@/lib/catalogue/spec-values";
 export type MediaRef = { id: string; storagePath: string; alt: string; width: number; height: number };
 export type CategoryOption = { id: string; slug: string; name: string };
 export type BrandOption = { id: string; name: string };
+export type GroupOption = { id: string; categoryId: string; name: string };
 
 export type SpecDefinitionView = {
   id: string;
@@ -30,6 +31,7 @@ export type ProductDraft = {
   slugEdited: boolean;
   brandId: string | null;
   categoryId: string | null;
+  groupId: string | null;
   summary: string;
   description: string;
   sourceUrl: string;

@@ -54,7 +54,7 @@ export const getPublicCategories = cached(async (): Promise<PublicCategory[]> =>
   return rows.map((r) => ({ ...r, image: r.image?.storagePath ? r.image : null, shopImage: r.shopImage?.storagePath ? r.shopImage : null, productCount: n.get(r.id) ?? 0 }));
 }, "public-categories", "catalogue");
 
-export type ProductCard = { id: string; slug: string; name: string; summary: string | null; brandName: string; categoryName: string; categorySlug: string; image: PublicImage | null };
+export type ProductCard = { id: string; slug: string; name: string; summary: string | null; brandName: string; categoryName: string; categorySlug: string; /** The series the product belongs to, when its category has series. */ groupName?: string | null; image: PublicImage | null };
 
 export const getPublicProducts = cached(
   async (opts: { categorySlug?: string; brandSlug?: string; page: number; pageSize: number }): Promise<{ rows: ProductCard[]; total: number }> => {
@@ -67,12 +67,14 @@ export const getPublicProducts = cached(
     const [{ n: total } = { n: 0 }] = await base;
 
     const rows = await db
-      .select({ id: s.products.id, slug: s.products.slug, name: s.products.name, summary: s.products.summary, brandName: s.brands.name, categoryName: s.productCategories.name, categorySlug: s.productCategories.slug })
+      .select({ id: s.products.id, slug: s.products.slug, name: s.products.name, summary: s.products.summary, brandName: s.brands.name, categoryName: s.productCategories.name, categorySlug: s.productCategories.slug, groupName: s.productGroups.name })
       .from(s.products)
       .innerJoin(s.brands, eq(s.brands.id, s.products.brandId))
       .innerJoin(s.productCategories, eq(s.productCategories.id, s.products.categoryId))
+      .leftJoin(s.productGroups, eq(s.productGroups.id, s.products.groupId))
       .where(where)
-      .orderBy(desc(s.products.publishedAt), asc(s.products.name))
+      // Inside one category, series first (products with none last) so each series is one block.
+      .orderBy(...(opts.categorySlug ? [sql`${s.productGroups.sort} asc nulls last`] : []), desc(s.products.publishedAt), asc(s.products.name))
       .limit(opts.pageSize)
       .offset((opts.page - 1) * opts.pageSize);
 
@@ -81,7 +83,7 @@ export const getPublicProducts = cached(
       ? await db.select({ productId: s.productImages.productId, ...imageCols }).from(s.productImages).innerJoin(s.media, eq(s.media.id, s.productImages.mediaId)).where(and(inArray(s.productImages.productId, ids), eq(s.productImages.isPrimary, true)))
       : [];
     const img = new Map(images.map((i) => [i.productId, { storagePath: i.storagePath, alt: i.alt, width: i.width, height: i.height }]));
-    return { total, rows: rows.map((r) => ({ ...r, image: img.get(r.id) ?? null })) };
+    return { total, rows: rows.map((r) => ({ ...r, groupName: opts.categorySlug ? r.groupName : null, image: img.get(r.id) ?? null })) };
   },
   "public-products",
   "catalogue",

@@ -48,12 +48,40 @@ export const categoryImageSeeds: Record<string, { file: string; alt: string }> =
  * November 2026 changes requested by Idyllic, applied once to the live database by scripts/seed-assets.ts.
  * Text is only replaced where it still matches what was seeded, so nothing staff have edited is overwritten.
  */
+/**
+ * Series inside Fullriver Batteries, in the order on Idyllic's price sheet. Each product is placed by the
+ * first rule its name matches, so "DCG" is tried before "DC". A product no rule matches stays without a
+ * series. Staff can change any of this in the admin (Products, Series).
+ */
+export const productGroupSeeds = {
+  categorySlug: "full-river-battery",
+  groups: [
+    { slug: "hgl-agm", name: "HGL AGM Series" },
+    { slug: "fat", name: "FAT Series (Front Access Terminal)" },
+    { slug: "dc", name: "DC Series" },
+    { slug: "dcg", name: "DCG" },
+    { slug: "battsys", name: "BATTSYS" },
+    { slug: "fsg", name: "FSG (Solar Gel Battery)" },
+  ],
+  rules: [
+    { group: "battsys", test: /^BATTSYS\b/i },
+    { group: "fsg", test: /\bFSG\d|SunGEL/i },
+    { group: "fat", test: /\bFAT\d/i },
+    { group: "dcg", test: /\bDCG\d/i },
+    { group: "dc", test: /\bDC\d/i },
+    { group: "hgl-agm", test: /\bHGL|^Fullriver 200Ah 12V Battery$/i },
+  ],
+};
+
 export const catalogueUpdatesNov2026 = {
   /** Category names are fixed in the admin, so they are always set. Slugs do not change. */
   names: { "full-river-battery": "Fullriver Batteries", sockets: "Switches and Sockets" } as Record<string, string>,
   descriptions: [
     { slug: "sockets", from: "Our Sockets are useful for both stand-alone and network applications", to: "Our Switches and Sockets are useful for both stand-alone and network applications" },
   ],
+  /** Contact and wording changes held in site_values, applied only where the stored value still matches. */
+  secondaryPhone: "0803 067 5746",
+  workProcessFixes: [{ from: "All our product are certified", to: "All our products are certified" }],
   /** New covers for the main site and, where no marketplace image is set, the marketplace. */
   images: ["inverters", "distribution-board"],
   faqs: [

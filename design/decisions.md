@@ -477,3 +477,12 @@ The home page bento and the marketplace tile now use different covers for the sa
 - **Quote requests:** choosing "Request a quote" on the contact form shows the product categories as toggles (at least one is required, except on a product page quote), an optional quantity or size, and an optional "where will it be used". The message becomes optional for quotes. The details are saved on the enquiry (shown in the admin) and included in the email.
 - **Admin products:** new "Datasheet" filter (No datasheet / Has datasheet), based on `product_documents`.
 - **Energy Assistant compare:** each row is now a two column grid where both columns wrap, so long values no longer squeeze product names to one letter a line or spill out of the card.
+
+## Series, second phone number, wording (November 6)
+
+- Fullriver Batteries are grouped into series, as on Idyllic's price sheet: HGL AGM Series, FAT Series (Front Access Terminal), DC Series, DCG, BATTSYS (the lithium range), FSG (Solar Gel Battery). New table `product_groups` (per category) and an optional `products.group_id`. The group is picked in the product editor (Basics, Series) and only shows for categories that have series. Moving a product to another category clears it.
+- Listings show a heading per series on the products page (when a category is chosen) and on the marketplace category page. Products with no series sit under "Other". Other categories are unchanged.
+- The price sheet's handwritten notes were not used. Nothing from them is on the site.
+- Second phone number 0803 067 5746 is `secondaryPhone` in the contact values. It shows under the main number in both footers and on the Contact page. The call-to-action band keeps its approved sentence, which names one number.
+- "product" became "products" in the Quality Assurance lines (home Who We Are, and the About/home work-process step).
+- Live database: needs `pnpm db:migrate` then `pnpm db:seed:assets` (both guarded, safe to repeat).

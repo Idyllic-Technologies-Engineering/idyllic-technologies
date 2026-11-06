@@ -23,6 +23,11 @@ export function SiteFooter({ contact, categories }: { contact: ContactDetails; c
             <a href={phoneHref(contact.phone)} className="font-heading text-3xl font-medium underline-offset-4 hover:underline">
               {contact.phone}
             </a>
+            {contact.secondaryPhone ? (
+              <a href={phoneHref(contact.secondaryPhone)} className="font-heading text-3xl font-medium underline-offset-4 hover:underline">
+                {contact.secondaryPhone}
+              </a>
+            ) : null}
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-on-footer-muted">{company.officeLabel}</p>

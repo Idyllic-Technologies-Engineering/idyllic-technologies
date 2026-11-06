@@ -5,7 +5,7 @@ import type { PublishStatus } from "@/lib/catalogue/publish";
 import { specValueToInput } from "@/lib/catalogue/spec-values";
 import type {
   BrandOption,
-  CategoryOption,
+  CategoryOption, GroupOption,
   MediaRef,
   ProductEditorData,
   ProductListRow,
@@ -42,6 +42,13 @@ export async function categoryOptions(): Promise<CategoryOption[]> {
     .select({ id: s.productCategories.id, slug: s.productCategories.slug, name: s.productCategories.name })
     .from(s.productCategories)
     .orderBy(asc(s.productCategories.sort));
+}
+
+export async function groupOptions(): Promise<GroupOption[]> {
+  return db
+    .select({ id: s.productGroups.id, categoryId: s.productGroups.categoryId, name: s.productGroups.name })
+    .from(s.productGroups)
+    .orderBy(asc(s.productGroups.sort));
 }
 
 export async function getCategoryBySlug(slug: string) {
@@ -256,6 +263,7 @@ export async function getProductEditorData(id: string): Promise<ProductEditorDat
       slugEdited: true,
       brandId: p.brandId,
       categoryId: p.categoryId,
+      groupId: p.groupId,
       summary: p.summary ?? "",
       description: p.description ?? "",
       sourceUrl: p.sourceUrl ?? "",

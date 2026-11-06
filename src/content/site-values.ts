@@ -25,7 +25,7 @@ export const siteValueSeeds: readonly SiteValueSeed[] = [
   {
     key: "about.work_process",
     value: [
-      { label: "Quality Assurance", percent: 85, description: "All our product are certified" },
+      { label: "Quality Assurance", percent: 85, description: "All our products are certified" },
       {
         label: "Service maintenance",
         percent: 96,
@@ -49,6 +49,7 @@ export const siteValueSeeds: readonly SiteValueSeed[] = [
     value: {
       phone: "+2347037973666",
       tollFree: "+2347037973666",
+      secondaryPhone: "0803 067 5746",
       email: "Info@idyllictechnologies.com",
       careersEmail: "careers@idyllictechnologies.com",
       hours: "Monday - Saturday: 9.00am to 5.00pm",

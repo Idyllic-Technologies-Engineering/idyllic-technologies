@@ -22,6 +22,7 @@ export const productInputSchema = z.object({
   slug,
   brandId: z.uuid("Choose a brand").nullable(),
   categoryId: z.uuid("Choose a category").nullable(),
+  groupId: z.uuid().nullable().default(null),
   summary: optionalText(500),
   description: optionalText(20000),
   sourceUrl: z

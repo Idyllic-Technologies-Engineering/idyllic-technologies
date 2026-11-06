@@ -6,6 +6,7 @@ import { CtaBand } from "@/components/corporate/cta-band";
 import { CategoryBento } from "@/components/corporate/home/category-bento";
 import { PageHero } from "@/components/corporate/page-hero";
 import { ProductCard } from "@/components/corporate/product-card";
+import { GroupedList } from "@/components/ui/grouped-list";
 import { Pagination } from "@/components/ui/pagination";
 import { marketplaceLabel } from "@/content/navigation";
 import { marketplaceNote, productsIntro } from "@/content/pages";
@@ -73,13 +74,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
 
           {rows.length > 0 ? (
             <>
-              <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-                {rows.map((p) => (
-                  <li key={p.id} className="reveal">
-                    <ProductCard product={p} />
-                  </li>
-                ))}
-              </ul>
+              <GroupedList items={rows} gridClassName="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3" itemClassName="reveal" renderItem={(p) => <ProductCard product={p} />} />
               <Pagination align="center" basePath="/products" page={page} pages={pages} params={{ category: category?.slug, brand: brand?.slug }} />
             </>
           ) : (

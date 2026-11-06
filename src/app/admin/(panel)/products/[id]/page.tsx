@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductEditor } from "@/components/admin/product-editor/product-editor";
 import { PageHeader } from "@/components/ui/page-header";
-import { brandOptions, categoryOptions, getProductEditorData, listSpecDefinitions } from "@/db/queries/catalogue";
+import { brandOptions, categoryOptions, groupOptions, getProductEditorData, listSpecDefinitions } from "@/db/queries/catalogue";
 import { idSchema } from "@/lib/catalogue/schemas";
 
 export const metadata: Metadata = { title: "Edit product" };
@@ -15,10 +15,11 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   const parsed = idSchema.safeParse((await params).id);
   if (!parsed.success) notFound();
 
-  const [data, brands, categories, specDefs] = await Promise.all([
+  const [data, brands, categories, groups, specDefs] = await Promise.all([
     getProductEditorData(parsed.data),
     brandOptions(),
     categoryOptions(),
+    groupOptions(),
     listSpecDefinitions(),
   ]);
   if (!data) notFound();
@@ -41,6 +42,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
         updatedAt={data.updatedAt}
         brands={brands}
         categories={categories}
+        groups={groups}
         specDefs={specDefs}
         shopUrl={process.env.NEXT_PUBLIC_SHOP_URL ?? ""}
       />

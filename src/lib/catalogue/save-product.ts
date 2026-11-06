@@ -99,6 +99,8 @@ export async function saveProduct(
 
   const brandId = input.brandId;
   const categoryId = input.categoryId;
+  // A series only counts when it belongs to the chosen category, so moving a product to another category clears it.
+  const [group] = input.groupId ? await db.select({ id: s.productGroups.id }).from(s.productGroups).where(and(eq(s.productGroups.id, input.groupId), eq(s.productGroups.categoryId, categoryId))).limit(1) : [];
 
   const id = await db.transaction(async (tx) => {
     const values = {
@@ -106,6 +108,7 @@ export async function saveProduct(
       name: input.name,
       brandId,
       categoryId,
+      groupId: group?.id ?? null,
       summary: input.summary,
       description: input.description,
       sourceUrl: input.sourceUrl,

@@ -77,7 +77,7 @@ describe("hard rule: no prices in the database", () => {
         if (/price|cost|amount|currency|naira|usd|ngn/i.test(col)) offenders.push(`${name}.${col}`);
       }
     }
-    expect(tablesChecked).toBe(25);
+    expect(tablesChecked).toBe(26);
     expect(offenders).toEqual([]);
   });
 });

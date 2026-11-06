@@ -7,6 +7,7 @@ import { ActiveFilters } from "@/components/marketplace/active-filters";
 import { FilterPanel } from "@/components/marketplace/filter-panel";
 import { ShopPagination } from "@/components/marketplace/shop-pagination";
 import { ShopProductCard } from "@/components/marketplace/shop-product-card";
+import { GroupedList } from "@/components/ui/grouped-list";
 import { EmptyState } from "@/components/ui/states";
 import { getCategoryFacets, getCategoryProducts } from "@/db/queries/shop";
 import { activeCount, parseFilters } from "@/lib/marketplace/filters";
@@ -56,13 +57,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           <ActiveFilters basePath={basePath} filters={filters} brands={data.brands} facets={data.facets} />
           {rows.length > 0 ? (
             <>
-              <ul className="grid gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
-                {rows.map((p) => (
-                  <li key={p.id}>
-                    <ShopProductCard product={p} />
-                  </li>
-                ))}
-              </ul>
+              <GroupedList items={rows} gridClassName="grid gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3" renderItem={(p) => <ShopProductCard product={p} />} />
               <ShopPagination basePath={basePath} filters={filters} pages={pages} />
             </>
           ) : applied > 0 ? (

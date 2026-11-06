@@ -37,6 +37,11 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             <a href={phoneHref(contact.phone)} className="w-fit font-heading text-4xl font-medium underline-offset-4 hover:underline">
               {contact.phone}
             </a>
+            {contact.secondaryPhone ? (
+              <a href={phoneHref(contact.secondaryPhone)} className="w-fit font-heading text-4xl font-medium underline-offset-4 hover:underline">
+                {contact.secondaryPhone}
+              </a>
+            ) : null}
             <a href={`mailto:${contact.email}`} className="w-fit text-lg text-ink-muted underline underline-offset-4 hover:text-ink">
               {contact.email}
             </a>

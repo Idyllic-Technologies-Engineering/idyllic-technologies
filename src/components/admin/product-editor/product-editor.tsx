@@ -7,7 +7,7 @@ import { FormBanner } from "@/components/ui/states";
 import { track } from "@/lib/analytics";
 import { draftToPayload } from "@/lib/catalogue/draft";
 import type { PublishStatus, StatusAction } from "@/lib/catalogue/publish";
-import type { BrandOption, CategoryOption, ProductDraft, SpecDefinitionView } from "@/lib/catalogue/types";
+import type { BrandOption, CategoryOption, GroupOption, ProductDraft, SpecDefinitionView } from "@/lib/catalogue/types";
 import { BasicsSection } from "./basics-section";
 import { DocumentsSection } from "./documents-section";
 import { FeaturesSection } from "./features-section";
@@ -24,6 +24,7 @@ type Props = {
   updatedAt: string | null;
   brands: BrandOption[];
   categories: CategoryOption[];
+  groups: GroupOption[];
   specDefs: SpecDefinitionView[];
   shopUrl: string;
 };
@@ -40,7 +41,7 @@ const sections = [
 
 const snapshot = (d: ProductDraft) => JSON.stringify(d);
 
-export function ProductEditor({ initial, status: initialStatus, publishedAt: initialPublishedAt, updatedAt, brands, categories, specDefs, shopUrl }: Props) {
+export function ProductEditor({ initial, status: initialStatus, publishedAt: initialPublishedAt, updatedAt, brands, categories, groups, specDefs, shopUrl }: Props) {
   const router = useRouter();
   const [draft, setDraft] = useState(initial);
   const [baseline, setBaseline] = useState(() => snapshot(initial));
@@ -130,7 +131,7 @@ export function ProductEditor({ initial, status: initialStatus, publishedAt: ini
     >
       <div className="flex min-w-0 flex-col gap-10 pb-28 lg:pb-0">
         {errorCount > 0 ? <FormBanner tone="error">{errorCount} field{errorCount === 1 ? "" : "s"} need attention. They are marked below.</FormBanner> : null}
-        <BasicsSection {...sectionProps} brands={brands} categories={categories} shopUrl={shopUrl} categoryChangeWarning={categoryChangeWarning} />
+        <BasicsSection {...sectionProps} brands={brands} categories={categories} groups={groups} shopUrl={shopUrl} categoryChangeWarning={categoryChangeWarning} />
         <SpecsSection {...sectionProps} defs={specDefs} categories={categories} />
         <FeaturesSection {...sectionProps} />
         <ImagesSection {...sectionProps} />

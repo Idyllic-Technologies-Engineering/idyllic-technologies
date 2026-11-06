@@ -111,7 +111,7 @@ export const getCategoryProducts = cached(async (categorySlug: string, filters: 
   if (!cat) return { rows: [], total: 0 };
   const where = and(published(), eq(s.products.categoryId, cat.id), ...(await filterConditions(cat.id, filters)));
   const [{ n: total } = { n: 0 }] = await db.select({ n: sql<number>`count(*)::int` }).from(s.products).innerJoin(s.brands, eq(s.brands.id, s.products.brandId)).where(where);
-  const rows = await db.select(cardCols).from(s.products).innerJoin(s.brands, eq(s.brands.id, s.products.brandId)).innerJoin(s.productCategories, eq(s.productCategories.id, s.products.categoryId)).where(where).orderBy(...orderBy(filters.sort)).limit(pageSize).offset((filters.page - 1) * pageSize);
+  const rows = await db.select({ ...cardCols, groupName: s.productGroups.name }).from(s.products).innerJoin(s.brands, eq(s.brands.id, s.products.brandId)).innerJoin(s.productCategories, eq(s.productCategories.id, s.products.categoryId)).leftJoin(s.productGroups, eq(s.productGroups.id, s.products.groupId)).where(where).orderBy(sql`${s.productGroups.sort} asc nulls last`, ...orderBy(filters.sort)).limit(pageSize).offset((filters.page - 1) * pageSize);
   return { total, rows: await withImages(rows) };
 }, "shop-category-products");
 
