@@ -11,6 +11,7 @@ export const staffPhotos: readonly StaffPhoto[] = [
   { src: "/photos/team-jude.webp", name: "Mr Jude Jibunor", role: "Head, Technical Unit", alt: "Portrait of Mr Jude Jibunor in a navy suit and striped tie", width: 1024, height: 1536 },
   { src: "/photos/team-rotimi.webp", name: "Mr Rotimi", role: "Head, Renewable Energy", alt: "Mr Rotimi speaking at an Idyllic Technologies event", width: 771, height: 1080 },
   { src: "/photos/team-anthony.webp", name: "Anthony Okafor", role: "Head Retail marketing", alt: "Portrait of Anthony Okafor in glasses, a white shirt and a striped tie", width: 810, height: 1080 },
+  { src: "/photos/team-omowunmi.webp", name: "Omowunmi Alana", role: "Team lead Retail Sales", alt: "Portrait of Omowunmi Alana in a black top, seated at a laptop", width: 576, height: 1024 },
 ];
 
 /**
