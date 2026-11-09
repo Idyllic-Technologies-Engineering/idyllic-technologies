@@ -486,3 +486,9 @@ The home page bento and the marketplace tile now use different covers for the sa
 - Second phone number 0803 067 5746 is `secondaryPhone` in the contact values. It shows under the main number in both footers and on the Contact page. The call-to-action band keeps its approved sentence, which names one number.
 - "product" became "products" in the Quality Assurance lines (home Who We Are, and the About/home work-process step).
 - Live database: needs `pnpm db:migrate` then `pnpm db:seed:assets` (both guarded, safe to repeat).
+
+## Hosting on Vercel Hobby (November 9)
+
+- The client declined Vercel Pro, so the site deploys on the free Hobby plan. Vercel's terms limit Hobby to non-commercial use, and the client accepted that risk.
+- Hobby allows a cron to run only once a day, so the keep-alive in `vercel.json` now runs once (05:00 UTC) instead of twice. That is still well inside Supabase's one-week inactivity pause.
+- DNS stays at WhoGoHost. The records Vercel shows for `idyllictechnologies.com`, `www` and `shop` are added there. MX records are left alone because they carry the company mailbox.
