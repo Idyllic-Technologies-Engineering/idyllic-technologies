@@ -2,8 +2,21 @@ import type { Metadata } from "next";
 import type { ContactDetails } from "@/lib/site-values";
 
 const trim = (u: string) => u.replace(/\/+$/, "");
-export const siteUrl = () => trim(process.env.NEXT_PUBLIC_SITE_URL ?? "https://idyllictechnologies.com");
-export const shopUrl = () => trim(process.env.NEXT_PUBLIC_SHOP_URL ?? "https://shop.idyllictechnologies.com");
+
+// An address setting that is empty, or written without "https://", would make `new URL(...)` throw while the page
+// metadata is built, and every page on that host would fail. Fall back to the real address instead.
+function cleanOrigin(value: string | undefined, fallback: string): string {
+  const v = value?.trim();
+  if (!v) return fallback;
+  const withScheme = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+  try {
+    return trim(new URL(withScheme).origin);
+  } catch {
+    return fallback;
+  }
+}
+export const siteUrl = () => cleanOrigin(process.env.NEXT_PUBLIC_SITE_URL, "https://idyllictechnologies.com");
+export const shopUrl = () => cleanOrigin(process.env.NEXT_PUBLIC_SHOP_URL, "https://shop.idyllictechnologies.com");
 export const absoluteUrl = (path: string) => `${siteUrl()}${path.startsWith("/") ? path : `/${path}`}`;
 export const shopAbsoluteUrl = (path: string) => `${shopUrl()}${path.startsWith("/") ? path : `/${path}`}`;
 /** Product pages always point search engines at the shop host, wherever they are shown. */
