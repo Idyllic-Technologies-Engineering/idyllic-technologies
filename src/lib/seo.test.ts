@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { contactSchema } from "@/lib/site-values";
 import { siteValueSeeds } from "@/content/site-values";
-import { articleJsonLd, breadcrumbJsonLd, canonicalProductUrl, faqPageJsonLd, jsonLdString, organizationJsonLd, pageMetadata, productJsonLd } from "./seo";
+import { articleJsonLd, breadcrumbJsonLd, canonicalProductUrl, cleanOrigin, faqPageJsonLd, jsonLdString, organizationJsonLd, pageMetadata, productJsonLd } from "./seo";
 
 beforeAll(() => {
   process.env.NEXT_PUBLIC_SITE_URL = "https://idyllictechnologies.com/";
@@ -50,5 +50,23 @@ describe("structured data", () => {
   });
   it("cannot be broken out of a script tag", () => {
     expect(jsonLdString({ a: "</script><script>alert(1)</script>" })).not.toContain("</script>");
+  });
+});
+
+describe("cleanOrigin", () => {
+  const FALLBACK = "https://shop.idyllictechnologies.com";
+  it("keeps a good address and drops a trailing slash", () => {
+    expect(cleanOrigin("https://shop.idyllictechnologies.com/", FALLBACK)).toBe("https://shop.idyllictechnologies.com");
+  });
+  it("adds https when it is missing", () => {
+    expect(cleanOrigin("shop.idyllictechnologies.com", FALLBACK)).toBe("https://shop.idyllictechnologies.com");
+  });
+  it("falls back when empty or missing", () => {
+    expect(cleanOrigin(undefined, FALLBACK)).toBe(FALLBACK);
+    expect(cleanOrigin("  ", FALLBACK)).toBe(FALLBACK);
+  });
+  it("falls back when a bad paste put another variable in the value", () => {
+    expect(cleanOrigin("\nNEXT_PUBLIC_SUPABASE_URL=https://abc.supabase.co", FALLBACK)).toBe(FALLBACK);
+    expect(cleanOrigin("\nNEXT_PUBLIC_SUPABASE_", FALLBACK)).toBe(FALLBACK);
   });
 });

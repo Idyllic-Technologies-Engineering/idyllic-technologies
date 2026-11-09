@@ -1,4 +1,5 @@
 /** Host helpers shared by the proxy and server code. No secrets here. */
+import { cleanOrigin } from "./seo";
 
 const SHOP_PREFIX = "shop.";
 
@@ -22,8 +23,8 @@ export function isShopHost(host: string | null | undefined): boolean {
   return (h.split(":")[0] ?? "").startsWith(SHOP_PREFIX);
 }
 
-export const SHOP_URL = process.env.NEXT_PUBLIC_SHOP_URL ?? "https://shop.idyllictechnologies.com";
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://idyllictechnologies.com";
+export const SHOP_URL = cleanOrigin(process.env.NEXT_PUBLIC_SHOP_URL, "https://shop.idyllictechnologies.com");
+export const SITE_URL = cleanOrigin(process.env.NEXT_PUBLIC_SITE_URL, "https://idyllictechnologies.com");
 
 /** Canonical product URL always points to the shop host. */
 export function canonicalProductUrl(slug: string): string {
