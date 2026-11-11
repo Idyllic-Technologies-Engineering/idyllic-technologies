@@ -11,7 +11,8 @@ import { Pagination } from "@/components/ui/pagination";
 import { marketplaceLabel } from "@/content/navigation";
 import { marketplaceNote, productsIntro } from "@/content/pages";
 import { getPublicBrands, getPublicCategories, getPublicProducts, getSiteContent } from "@/db/queries/public";
-import { pageMetadata, shopUrl } from "@/lib/seo";
+import { JsonLd } from "@/components/corporate/json-ld";
+import { itemListJsonLd, pageMetadata, shopUrl, webPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({ title: productsIntro.title, description: productsIntro.body, path: "/products" });
 
@@ -92,6 +93,8 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         </ShopLink>
       </Container>
       <CtaBand contact={content.contact} />
+      <JsonLd data={webPageJsonLd({ type: "CollectionPage", name: productsIntro.title, description: productsIntro.body, path: "/products" })} />
+      <JsonLd data={itemListJsonLd(categories.map((c) => ({ name: c.name, url: `${shopUrl()}/category/${c.slug}` })))} />
     </>
   );
 }

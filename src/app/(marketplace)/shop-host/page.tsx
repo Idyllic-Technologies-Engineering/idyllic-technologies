@@ -6,10 +6,11 @@ import { MediaImage } from "@/components/corporate/media-image";
 import { SiteLink } from "@/components/corporate/shop-link";
 import { ShopSearch } from "@/components/marketplace/shop-search";
 import { NewestProducts } from "@/components/marketplace/newest-products";
+import { seoCopy } from "@/content/seo";
 import { HOME_LATEST_PAGE, getLatestProducts, getShopHome } from "@/db/queries/shop";
 import { pageMetadata, siteUrl } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({ host: "shop", title: "Idyllic Technologies Marketplace", description: "Browse products by category or brand, compare them, and book on WhatsApp.", path: "/" });
+export const metadata: Metadata = pageMetadata({ host: "shop", title: { absolute: `${seoCopy.shopHome.title} | Idyllic Technologies Marketplace` }, description: seoCopy.shopHome.description, path: "/" });
 
 const steps = [
   { title: "Add to your booking list", body: "Collect the products you want while you browse. Your list stays in this browser." },

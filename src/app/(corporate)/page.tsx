@@ -11,11 +11,12 @@ import { TeamProcess } from "@/components/corporate/home/team-process";
 import { Testimonials } from "@/components/corporate/home/testimonials";
 import { TrustStats } from "@/components/corporate/home/trust-stats";
 import { WhoWeAre } from "@/components/corporate/home/who-we-are";
-import { hero, story } from "@/content/pages";
+import { seoCopy } from "@/content/seo";
 import { getPublicCategories, getPublishedClients, getPublishedPosts, getPublishedTestimonials, getSiteContent } from "@/db/queries/public";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({ title: "Idyllic Technologies", description: story.tagline, path: "/" });
+// The title is the whole title: the layout's "| Idyllic Technologies" ending is not added a second time.
+export const metadata: Metadata = pageMetadata({ title: { absolute: `${seoCopy.home.title} | Idyllic Technologies` }, description: seoCopy.home.description, path: "/" });
 
 export default async function HomePage() {
   const [content, categories, clients, testimonials, news] = await Promise.all([

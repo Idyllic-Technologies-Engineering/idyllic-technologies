@@ -8,7 +8,7 @@ import { BookingBar } from "@/components/marketplace/booking-bar";
 import { ShopFooter } from "@/components/marketplace/shop-footer";
 import { ShopHeader } from "@/components/marketplace/shop-header";
 import { getPublicCategories, getSiteContent } from "@/db/queries/public";
-import { SITE_NAME, absoluteUrl, shopUrl, shopWebsiteJsonLd } from "@/lib/seo";
+import { SITE_NAME, absoluteUrl, searchConsoleVerification, shopUrl, shopWebsiteJsonLd } from "@/lib/seo";
 
 // Rendered when asked for, never at build time. Every page here reads the database, and a build must not depend on the
 // database being fast: when it was slow, six pages ran past the 60 second limit and the deploy failed. The reads are
@@ -19,6 +19,8 @@ export function generateMetadata(): Metadata {
   return {
     metadataBase: new URL(shopUrl()),
     title: { default: `${SITE_NAME} Marketplace`, template: `%s | ${SITE_NAME} Marketplace` },
+    applicationName: `${SITE_NAME} Marketplace`,
+    ...searchConsoleVerification(),
   };
 }
 

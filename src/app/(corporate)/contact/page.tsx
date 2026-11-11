@@ -6,7 +6,8 @@ import { summarizeAnswers } from "@/assistant/flows";
 import { AUDIENCES, LOAD_BANDS, NEEDS } from "@/assistant/engine/types";
 import { contactPage } from "@/content/pages";
 import { getPublicCategories, getPublicProduct, getSiteContent } from "@/db/queries/public";
-import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/corporate/json-ld";
+import { pageMetadata, webPageJsonLd } from "@/lib/seo";
 import { phoneHref } from "@/lib/site-values";
 
 export const metadata: Metadata = pageMetadata({ title: contactPage.title, description: contactPage.welcome, path: "/contact" });
@@ -76,6 +77,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
           <ContactForm initialType={type} categories={categories.map((c) => ({ slug: c.slug, name: c.name }))} initialItems={product ? [product.category.slug] : []} productSlug={product ? product.slug : null} productName={product?.name ?? null} turnstileSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || null} initialMessage={initialMessage} fromAssistant={fromAssistant} />
         </div>
       </Container>
+      <JsonLd data={webPageJsonLd({ type: "ContactPage", name: contactPage.title, description: contactPage.welcome, path: "/contact" })} />
     </>
   );
 }

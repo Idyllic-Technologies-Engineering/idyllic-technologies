@@ -1,7 +1,9 @@
 /**
  * Starting catalogue values, seeded once by src/db/seed.ts and edited in the CMS afterwards.
  * Exactly six categories. Do not add more.
- * Category descriptions are verbatim from the approved PDF. Do not edit them here. Two names changed at
+ * Category descriptions were rewritten in November 2026 at Idyllic's request: the PDF's wording was placeholder text
+ * (for example Solar Panel read "Our broad network with key influencers"). The new lines use only facts the site already
+ * states (brands per category, the 2010 Fullriver start, the uses and definitions from the old lines). Two names changed at
  * Idyllic's request in November 2026: "Full River Battery" is "Fullriver Batteries" and "Sockets" is
  * "Switches and Sockets" (also in that description). Slugs are unchanged, so addresses keep working.
  * Spec templates come from section 5 of PROJECT_SPEC.md and are to be confirmed against
@@ -25,37 +27,37 @@ export const categorySeeds = [
   {
     slug: "full-river-battery",
     name: "Fullriver Batteries",
-    description: "The Full river battery. Energy (wind) household systems",
+    description: "Fullriver batteries, the range Idyllic Technologies has distributed since 2010, for homes, businesses and industries.",
     sort: 0,
   },
   {
     slug: "inverters",
     name: "Inverters",
-    description: "Inverters are an integral part of a solar electric system.",
+    description: "Solis inverters from Idyllic Technologies. An inverter is an integral part of a solar electric system.",
     sort: 1,
   },
   {
     slug: "ups",
     name: "UPS",
-    description: "IDF, servers, storage, VoIP and distributed IT, you should consider",
+    description: "Eaton UPS systems for reliable power backup, including IDF, servers, storage, VoIP and distributed IT.",
     sort: 2,
   },
   {
     slug: "solar-panel",
     name: "Solar Panel",
-    description: "Our broad network with key influencers, we reaches the audience at the right time.",
+    description: "Ecogreen solar panels from Idyllic Technologies, part of our move into renewable energy solutions.",
     sort: 3,
   },
   {
     slug: "distribution-board",
     name: "Distribution Board",
-    description: "Our distribution board divides an electrical power feed into subsidiary circuits",
+    description: "Eaton distribution boards, which divide an electrical power feed into subsidiary circuits.",
     sort: 4,
   },
   {
     slug: "sockets",
     name: "Switches and Sockets",
-    description: "Our Switches and Sockets are useful for both stand-alone and network applications",
+    description: "Switches and sockets from Idyllic Technologies, for both stand-alone and network applications.",
     sort: 5,
   },
 ] as const;

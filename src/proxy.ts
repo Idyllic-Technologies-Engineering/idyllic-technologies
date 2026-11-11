@@ -25,8 +25,8 @@ export async function proxy(request: NextRequest) {
   }
 
   let response: NextResponse;
-  // robots.txt is one file at the root that answers for both hosts, so it is not rewritten.
-  if (shop && !pathname.startsWith("/api") && !pathname.startsWith("/_next") && pathname !== "/robots.txt") {
+  // robots.txt and llms.txt are single files at the root that answer for both hosts, so they are not rewritten.
+  if (shop && !pathname.startsWith("/api") && !pathname.startsWith("/_next") && pathname !== "/robots.txt" && pathname !== "/llms.txt") {
     const url = request.nextUrl.clone();
     url.pathname = `/shop-host${pathname === "/" ? "" : pathname}`;
     response = NextResponse.rewrite(url);

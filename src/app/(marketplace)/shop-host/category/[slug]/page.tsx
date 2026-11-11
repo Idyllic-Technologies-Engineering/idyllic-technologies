@@ -11,7 +11,7 @@ import { GroupedList } from "@/components/ui/grouped-list";
 import { EmptyState } from "@/components/ui/states";
 import { getCategoryFacets, getCategoryProducts } from "@/db/queries/shop";
 import { activeCount, parseFilters } from "@/lib/marketplace/filters";
-import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo";
+import { breadcrumbJsonLd, canonicalProductUrl, itemListJsonLd, pageMetadata, webPageJsonLd } from "@/lib/seo";
 
 const PAGE_SIZE = 12;
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
@@ -68,6 +68,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         </section>
       </Container>
       <JsonLd data={breadcrumbJsonLd([{ name: "Marketplace", path: "/" }, { name: data.category.name, path: basePath }], "shop")} />
+      <JsonLd data={webPageJsonLd({ type: "CollectionPage", name: data.category.name, description: data.category.description, path: basePath, host: "shop" })} />
+      {rows.length > 0 ? <JsonLd data={itemListJsonLd(rows.map((p) => ({ name: p.name, url: canonicalProductUrl(p.slug) })))} /> : null}
     </>
   );
 }

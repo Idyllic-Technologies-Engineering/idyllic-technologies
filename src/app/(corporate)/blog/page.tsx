@@ -5,10 +5,11 @@ import { PageHero } from "@/components/corporate/page-hero";
 import { PostCard } from "@/components/corporate/post-card";
 import { Pagination } from "@/components/ui/pagination";
 import { blogPage } from "@/content/pages";
+import { seoCopy } from "@/content/seo";
 import { getBlogFilters, getPublishedPosts } from "@/db/queries/public";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({ title: blogPage.title, path: "/blog" });
+export const metadata: Metadata = pageMetadata({ title: blogPage.title, description: seoCopy.blog.description, path: "/blog" });
 
 const PAGE_SIZE = 9;
 type SearchParams = { category?: string; tag?: string; page?: string };

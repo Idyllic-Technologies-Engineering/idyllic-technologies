@@ -6,10 +6,11 @@ import { JsonLd } from "@/components/corporate/json-ld";
 import { PageHero } from "@/components/corporate/page-hero";
 import { ArrowLink } from "@/components/corporate/arrow-link";
 import { faqPage } from "@/content/pages";
+import { seoCopy } from "@/content/seo";
 import { getPublishedFaqs, getSiteContent } from "@/db/queries/public";
 import { faqPageJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({ title: faqPage.title, path: "/faqs" });
+export const metadata: Metadata = pageMetadata({ title: faqPage.title, description: seoCopy.faqs.description, path: "/faqs" });
 
 export default async function FaqsPage() {
   const [faqs, content] = await Promise.all([getPublishedFaqs(), getSiteContent()]);

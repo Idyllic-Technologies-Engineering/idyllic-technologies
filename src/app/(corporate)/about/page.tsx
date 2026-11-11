@@ -6,7 +6,8 @@ import { Testimonials } from "@/components/corporate/home/testimonials";
 import { PageHero } from "@/components/corporate/page-hero";
 import { about } from "@/content/pages";
 import { getPublishedTestimonials, getSiteContent } from "@/db/queries/public";
-import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/corporate/json-ld";
+import { pageMetadata, webPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({ title: about.title, description: about.headline, path: "/about" });
 
@@ -21,6 +22,7 @@ export default async function AboutPage() {
       <MissionValues />
       <Testimonials items={testimonials} />
       <CtaBand contact={content.contact} />
+      <JsonLd data={webPageJsonLd({ type: "AboutPage", name: about.title, description: about.headline, path: "/about" })} />
     </>
   );
 }
