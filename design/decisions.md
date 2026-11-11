@@ -492,3 +492,13 @@ The home page bento and the marketplace tile now use different covers for the sa
 - The client declined Vercel Pro, so the site deploys on the free Hobby plan. Vercel's terms limit Hobby to non-commercial use, and the client accepted that risk.
 - Hobby allows a cron to run only once a day, so the keep-alive in `vercel.json` now runs once (05:00 UTC) instead of twice. That is still well inside Supabase's one-week inactivity pause.
 - DNS stays at WhoGoHost. The records Vercel shows for `idyllictechnologies.com`, `www` and `shop` are added there. MX records are left alone because they carry the company mailbox.
+
+## Google Analytics 4
+
+- Loaded only in production builds and only when `NEXT_PUBLIC_GA_ID` is a valid `G-` ID. Set the variable on Vercel for the Production environment only, so previews and local work stay out of the numbers.
+- `gtag('config')` runs with `send_page_view: false`. `AnalyticsTracker` (`src/components/analytics-tracker.tsx`) sends `page_view` on every route change, so the GA setting "Page changes based on browser history events" must be switched off, or each navigation is counted twice.
+- Events fired before gtag.js loads wait in a queue and are sent right after the config.
+- Automatic events: `page_view`, `scroll_depth` (25/50/75/100), `cta_click` (any element with `data-cta`, already on `ArrowLink` and both product cards), `outbound_click`, `file_download`, `phone_click`, `email_click`, `whatsapp_click`. Existing events (`booking_whatsapp`, `search`, `contact_submit`, assistant events) are unchanged.
+- Privacy: query strings are never sent on outbound links, typed-text parameters (`q`, `search`, `email` and similar) are removed from `page_location`, and phone numbers and addresses are not reported. UTM tags are kept for attribution.
+- Corporate site and marketplace share one GA property. GA's cookie is set on the parent domain, so a visitor moving between the two stays in one session. Use the built-in Hostname dimension to split them.
+- Not done: a consent notice. TODO: confirm with Idyllic whether one is needed (Nigeria NDPA, and any EU or UK visitors).

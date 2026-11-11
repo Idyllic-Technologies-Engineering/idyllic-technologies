@@ -25,7 +25,7 @@ export function ShopProductCard({ product }: { product: ProductCard }) {
       <div className="flex flex-1 flex-col gap-1">
         <p className="text-sm text-ink-muted">{product.brandName}</p>
         <h3 className="text-xl font-medium">
-          <Link href={`/product/${product.slug}`} className="after:absolute after:inset-0 after:z-0 after:content-[''] focus-visible:outline-offset-4">
+          <Link href={`/product/${product.slug}`} data-cta="" className="after:absolute after:inset-0 after:z-0 after:content-[''] focus-visible:outline-offset-4">
             {product.name}
           </Link>
         </h3>
