@@ -25,11 +25,11 @@ export function ArrowLink({ href, children, variant = "primary", external = fals
     </>
   );
   return external ? (
-    <a href={href} className={classes}>
+    <a href={href} className={classes} data-cta="">
       {inner}
     </a>
   ) : (
-    <Link href={href} className={classes}>
+    <Link href={href} className={classes} data-cta="">
       {inner}
     </Link>
   );
